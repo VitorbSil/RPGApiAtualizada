@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RpgApi.Data;
+using RpgApi.Extensions;
 using RpgApi.Models;
 
 namespace RpgApi.Controllers
@@ -64,9 +65,9 @@ namespace RpgApi.Controllers
             try
             {
                 if (novoPersonagem.PontosVida > 100)
-                {
                     throw new Exception("Pontos de vida não pode ser maior que 100");
-                }
+                
+                novoPersonagem.Usuario = _context.TB_USUARIOS.FirstOrDefault(uBusca => uBusca.Id == User.UsuarioId());
 
                 await _context.TB_PERSONAGENS.AddAsync(novoPersonagem);
                 await _context.SaveChangesAsync();
